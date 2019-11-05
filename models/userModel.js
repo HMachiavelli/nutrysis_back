@@ -1,6 +1,6 @@
 module.exports = app => {
     // Setup schema
-    const userSchema = app.mongoose.Schema({
+    const userSchema = app.db.Schema({
         name: {
             type: String,
             required: true
@@ -32,7 +32,7 @@ module.exports = app => {
     });
     
     // Export Contact model
-    const User = app.mongoose.model('User', userSchema);
+    const User = app.db.model('User', userSchema);
 
     return { User}
 }

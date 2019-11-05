@@ -10,7 +10,7 @@ module.exports = app => {
     }
 
     const strategy = new Strategy(params, (payload, done) => {
-        app.mongoose.findById(payload.id)
+        app.db.findById(payload.id)
              .then(user => done(null, user ? { ...payload } : false))
              .catch(err => done(err, false))
     })
