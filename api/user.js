@@ -14,8 +14,9 @@ module.exports = app => {
 
         if(!req.originalUrl.startsWith('/users')) user.admin = false
         if(!req.user || !req.user.admin) user.admin = false
-
+        
         user.deletedAt = null
+        user.type = 'pacient'
 
         try {
             existsOrError(user.name, 'Nome não informado')
@@ -39,32 +40,8 @@ module.exports = app => {
     }   
 
     const update = async (req, res) => {
-        // const user = new User({ ...req.body })
-        // user._id = req.params.id
-        // user.createAt = User.findById(user._id, 'createAt')
-
-        // if(!req.body.admin) user.admin = User.findById(user._id, 'admin')
-        // if(!req.user || !req.user.admin) user.admin = false
-
-        // try {
-        //     existsOrError(user.name, 'Nome não informado')
-        //     existsOrError(user.email, 'E-mail não informado')
-        //     existsOrError(user.password, 'Senha não informada')
-        //     existsOrError(req.body.confirmPassword, 'Confirmação de Senha inválida')
-        //     equalsOrError(user.password, req.body.confirmPassword, 'Senhas não conferem')         
-        // } catch(msg) {
-        //     return res.status(400).send(msg)
-        // }
-
-        // user.password = encryptPassword(user.password)
-
-        // const userUpdate = await User.findByIdAndUpdate(user._id, user, { new: true, useFindAndModify: false})
-
-        // await userUpdate.save()
-        //     .then(_ => res.status(204).send({userUpdate}))
-        //     .catch(err => res.status(500).send(err))
         try{
-            const { name, email, gender, phone, age, cpf, password } = req.body
+            const { name, email, gender, phone, age, cpf, type, password } = req.body
 
             //const admin = false
 
@@ -78,6 +55,7 @@ module.exports = app => {
                 phone: phone,
                 age: age,
                 cpf: cpf,
+                type: type,
                 password: encryptPassword(password)
             }}, { new: true, useFindAndModify: false })
                 .catch(err => err.status(500). send(err))

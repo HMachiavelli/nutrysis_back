@@ -1,6 +1,10 @@
 module.exports = app => {
     // Setup schema
     const examSchema = app.db.Schema({
+        patientId: {
+            type: String,
+            required: true
+        },
         name: {
             type: String,
             required: true
@@ -19,5 +23,5 @@ module.exports = app => {
     // Export Contact model
     const Exam = app.db.model('Exam', examSchema);
 
-    return { Exam}
+    return { Exam }
 }

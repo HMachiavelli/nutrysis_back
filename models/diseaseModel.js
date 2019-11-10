@@ -5,7 +5,7 @@ module.exports = app => {
             type: String,
             required: true
         },
-        dateDescovery: {
+        dateDiscovery: {
             type: Date
         },
         observation: {
@@ -16,5 +16,5 @@ module.exports = app => {
     // Export Contact model
     const Disease = app.db.model('Disease', diseaseSchema);
 
-    return { Disease}
+    return { Disease }
 }

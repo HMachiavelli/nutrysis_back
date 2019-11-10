@@ -13,6 +13,10 @@ module.exports = app => {
         phone: String,
         age: Number,
         cpf: String,
+        type: {
+            type: String, 
+            enum: ['pacient', 'nutritionist']
+        },
         password: {
             type: String,
             required: true
@@ -27,12 +31,12 @@ module.exports = app => {
         },
         deleteAt: {
             type: Date,
-            defalut: null
+            default: null
         }
     });
     
     // Export Contact model
     const User = app.db.model('User', userSchema);
 
-    return { User}
+    return { User }
 }
