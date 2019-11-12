@@ -22,8 +22,8 @@ module.exports = app => {
             existsOrError(user.name, 'Nome não informado')
             existsOrError(user.email, 'E-mail não informado')
             existsOrError(user.password, 'Senha não informada')
-            existsOrError(req.body.confirmPassword, 'Confirmação de Senha inválida')
-            equalsOrError(user.password, req.body.confirmPassword, 'Senhas não conferem')
+            existsOrError(req.body.confPassword, 'Confirmação de Senha inválida')
+            equalsOrError(user.password, req.body.confPassword, 'Senhas não conferem')
 
             const userFromDB = await User.findOne({ email: user.email }, {}, {})
 
