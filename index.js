@@ -1,16 +1,17 @@
 const app = require('express')()
 const consign = require('consign')
-const db = require('./config/db')
+const db = require('./src/config/db')
 
 app.db = db
 
 consign()
-    .then('./models')
-    .include('./config/passport.js')
-    .then('./config/middlewares.js')
-    .then('./api/validation.js')
-    .then('./api')
-    .then('./config/routes.js')
+    .then('./src/models')
+    .include('./src/config/passport.js')
+    .then('./src/config/middlewares.js')
+    .then('./src/api/validation.js')
+    .then('./modules')
+    .then('./src/api')
+    .then('./src/config/routes.js')
     .into(app)
 
 app.listen(3000, () => {

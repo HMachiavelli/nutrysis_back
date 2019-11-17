@@ -1,6 +1,6 @@
 module.exports = app => {
-    const { existsOrError, notExistsOrError, equalsOrError } = app.api.validation
-    const { Disease } = app.models.diseaseModel
+    const { existsOrError, notExistsOrError, equalsOrError } = app.src.api.validation
+    const { Disease } = app.src.models.diseaseModel
     
     const insert = async (req, res) => {
         const disease = new Disease({ ...req.body })
