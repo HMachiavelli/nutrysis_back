@@ -2,7 +2,7 @@ const path = require('path')
 const nodemailer = require('nodemailer')
 const hbs = require('nodemailer-express-handlebars')
 
-const { host, port, user, pass } = require('../src/config/mail.json')
+const { email: { host, port, user, pass } } = require('../.env')
 
 const transport = nodemailer.createTransport({
   host, 

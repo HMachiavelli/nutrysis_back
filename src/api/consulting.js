@@ -9,13 +9,14 @@ module.exports = app => {
             existsOrError(consultating.patientId, 'Paciente não informado')  
             existsOrError(consultating.nutritionistId, 'Nutricionista não informado')      
             existsOrError(consultating.date, 'Data não informada') 
+            
+            await consultating.save()
+                .then(_ => res.status(204).send())
+                .catch(err => res.status(500).send(err))
         } catch(msg) {
             return res.status(400).send(msg)
         }
 
-        consultating.save()
-            .then(_ => res.status(204).send())
-            .catch(err => res.status(500).send(err))
     }   
 
     const update = async (req, res) => {
@@ -28,7 +29,7 @@ module.exports = app => {
                 date: date,
                 observation: observation
             }}, { new: true, useFindAndModify: false })
-                .catch(err => err.status(500). send(err))
+                .catch(err => res.status(500). send(err))
 
             existsOrError(rowUpdated, "Consulta não foi encontrada")
 
@@ -41,13 +42,17 @@ module.exports = app => {
     const get = (req, res) => {
         Consultating.find()
             .then(consultatings => res.json(consultatings))
-            .catch(err => err.status(500).send(err))
+            .catch(err => res.status(500).send(err))
     }
 
     const getById = (req, res) => {
-        Consultating.findById(req.params.id)
-            .then(consultating => res.json(consultating))
-            .catch(err => res.status(500).send(err))
+        if (app.db.Types.ObjectId.isValid(req.params.id)) {         
+            Consultating.findById(req.params.id)
+                .then(consultating => res.json(consultating))
+                .catch(err => res.status(500).send(err))
+        } else {
+            return res.status(500).send("Please provide correct Id")
+        }
     }
 
     const remove = async (req, res) => {
@@ -60,7 +65,7 @@ module.exports = app => {
             existsOrError(patient, "Consulta está vinculada a um paciente")
 
             const rowUpdated = await Consultating.findOneAndDelete({ _id: req.params.id })
-                .catch(err => err.status(500). send(err))
+                .catch(err => res.status(500). send(err))
 
             existsOrError(rowUpdated, "Consulta não foi encontrada")
 

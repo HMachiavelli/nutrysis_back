@@ -12,9 +12,17 @@ module.exports = app => {
     }
 
     const strategy = new Strategy(params, (payload, done) => {
-        User.findById(payload._id)
-             .then(user => done(null, user ? { ...payload } : false))
-             .catch(err => done(err, false))
+        try{
+            if (app.db.Types.ObjectId.isValid(payload._id)) {
+                User.findById(payload._id)
+                    .then(user => done(null, user ? { ...payload } : false))
+                    .catch(err => done(err, false))
+            } else {
+
+            }
+        } catch(msg) {
+            
+        }
     })
 
     passport.use(strategy)

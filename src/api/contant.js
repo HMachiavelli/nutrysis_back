@@ -8,13 +8,13 @@ module.exports = app => {
         try {
             existsOrError(contact.ddd, 'DDD não informado')  
             existsOrError(contact.number, 'Numero não informado')       
+
+            await contact.save()
+                .then(_ => res.status(204).send())
+                .catch(err => res.status(500).send(err))
         } catch(msg) {
             return res.status(400).send(msg)
         }
-
-        contact.save()
-            .then(_ => res.status(204).send())
-            .catch(err => res.status(500).send(err))
     }   
 
     const update = async (req, res) => {
@@ -26,7 +26,7 @@ module.exports = app => {
                 number: number,
                 type: type
             }}, { new: true, useFindAndModify: false })
-                .catch(err => err.status(500). send(err))
+                .catch(err => res.status(500). send(err))
 
             existsOrError(rowUpdated, "Contato não foi encontrado")
 
@@ -39,19 +39,23 @@ module.exports = app => {
     const get = (req, res) => {
         Contact.find()
             .then(contacts => res.json(contacts))
-            .catch(err => err.status(500).send(err))
+            .catch(err => res.status(500).send(err))
     }
 
     const getById = (req, res) => {
-        Contact.findById(req.params.id)
-            .then(contact => res.json(contact))
-            .catch(err => res.status(500).send(err))
+        if (app.db.Types.ObjectId.isValid(req.params.id)) {         
+            Contact.findById(req.params.id)
+                .then(contact => res.json(contact))
+                .catch(err => res.status(500).send(err))
+        } else {
+            return res.status(500).send("Please provide correct Id")
+        }
     }
 
     const remove = async (req, res) => {
         try {
             const rowUpdated = await Contact.findOneAndDelete({ _id: req.params.id })
-                .catch(err => err.status(500). send(err))
+                .catch(err => res.status(500). send(err))
 
             existsOrError(rowUpdated, "Contato não foi encontrado")
 
