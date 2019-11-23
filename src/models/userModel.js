@@ -1,3 +1,5 @@
+const bcrypt = require('bcrypt-nodejs')
+
 module.exports = app => {
     // Setup schema
     const userSchema = app.db.Schema({
@@ -7,7 +9,9 @@ module.exports = app => {
         },
         email: {
             type: String,
-            required: true
+            unique: true,
+            required: true,
+            lowercase: true
         },
         gender: String,
         phone: String,
@@ -19,7 +23,16 @@ module.exports = app => {
         },
         password: {
             type: String,
-            required: true
+            required: true,
+            select: false
+        },
+        passwordResetToken: {
+            type: String,
+            select: false
+        },
+        passwordResetExpires: {
+            type: Date,
+            select: false
         },
         admin: {
             type: Boolean,
@@ -34,6 +47,17 @@ module.exports = app => {
             default: null
         }
     });
+
+    userSchema.pre('save', async function(next) {
+        this.password = encryptPassword(this.password)
+
+        next();
+    })
+
+    const encryptPassword = password => {
+        const salt = bcrypt.genSaltSync(10)
+        return bcrypt.hashSync(password, salt)
+    }
     
     // Export Contact model
     const User = app.db.model('User', userSchema);
