@@ -74,6 +74,12 @@ module.exports = app => {
             .catch(err => res.status(500).send(err))
     }
 
+    const getNutritionists = (req, res) => {
+        User.find({ deleteAt: null, type: "nutritionist" })
+            .then(users => res.json(users))
+            .catch(err => res.status(500).send(err))
+    }
+
     const getById = (req, res) => {
         if (app.db.Types.ObjectId.isValid(req.params.id)) {
             User.findById(req.params.id)
@@ -107,5 +113,5 @@ module.exports = app => {
         }
     }
 
-    return { insert, update, get, getPacients, getById, remove }
+    return { insert, update, get, getPacients, getNutritionists, getById, remove }
 }
