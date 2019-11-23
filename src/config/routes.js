@@ -7,7 +7,7 @@ module.exports = app => {
 
     app.route('/forgot_password')
         .post(app.src.api.auth.forgotPassword)
-    
+
     app.route('/reset_password/:token')
         .post(app.src.api.auth.resetPassword)
 
@@ -15,6 +15,14 @@ module.exports = app => {
         .all(app.src.config.passport.authenticate())
         .get(app.src.api.user.get)
         .post(app.src.api.user.insert)
+
+    app.route('/pacients')
+        .all(app.src.config.passport.authenticate())
+        .get(app.src.api.user.getPacients);
+
+        app.route('/nutritionists')
+        .all(app.src.config.passport.authenticate())
+        .get(app.src.api.user.getNutritionists);
 
     app.route('/users/:id')
         .all(app.src.config.passport.authenticate())
@@ -52,7 +60,7 @@ module.exports = app => {
         .put(app.src.api.disease.update)
         // .delete(admin(app.src.api.disease.remove))
         .delete(app.src.api.disease.remove)
-    
+
     app.route('/consultings')
         .all(app.src.config.passport.authenticate())
         .get(app.src.api.consulting.get)

@@ -1,15 +1,16 @@
 module.exports = app => {
     const { existsOrError, notExistsOrError, equalsOrError } = app.src.api.validation
     const { Consultating } = app.src.models.consultantingModel
-    
+    const { User } = app.src.models.userModel
+
     const insert = async (req, res) => {
         const consultating = new Consultating({ ...req.body })
 
         try {
-            existsOrError(consultating.patientId, 'Paciente não informado')  
-            existsOrError(consultating.nutritionistId, 'Nutricionista não informado')      
-            existsOrError(consultating.date, 'Data não informada') 
-            
+            existsOrError(consultating.patientId, 'Paciente não informado')
+            existsOrError(consultating.nutritionistId, 'Nutricionista não informado')
+            existsOrError(consultating.date, 'Data não informada')
+
             await consultating.save()
                 .then(_ => res.status(204).send())
                 .catch(err => res.status(500).send(err))
@@ -17,7 +18,7 @@ module.exports = app => {
             return res.status(400).send(msg)
         }
 
-    }   
+    }
 
     const update = async (req, res) => {
         try{
@@ -46,7 +47,7 @@ module.exports = app => {
     }
 
     const getById = (req, res) => {
-        if (app.db.Types.ObjectId.isValid(req.params.id)) {         
+        if (app.db.Types.ObjectId.isValid(req.params.id)) {
             Consultating.findById(req.params.id)
                 .then(consultating => res.json(consultating))
                 .catch(err => res.status(500).send(err))
@@ -57,10 +58,10 @@ module.exports = app => {
 
     const remove = async (req, res) => {
         try {
-            const consultating = Consultating.findById(req.params.id)
-                .catch(err => res.status(500).send(err))    
+            const consultating = await Consultating.findById(req.params.id)
+                .catch(err => res.status(500).send(err))
 
-            const patient = app.api.user.findById(consultating.patientId)
+            const patient = await User.findById(consultating.patientId);
 
             existsOrError(patient, "Consulta está vinculada a um paciente")
 
