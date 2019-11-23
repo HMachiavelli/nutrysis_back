@@ -16,6 +16,10 @@ module.exports = app => {
         .get(app.src.api.user.get)
         .post(app.src.api.user.insert)
 
+    app.route('/pacients')
+        .all(app.src.config.passport.authenticate())
+        .get(app.src.api.user.getPacients);
+
     app.route('/users/:id')
         .all(app.src.config.passport.authenticate())
         // .get(admin(app.src.api.user.getById))

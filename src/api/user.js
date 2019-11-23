@@ -32,7 +32,7 @@ module.exports = app => {
 
     const update = async (req, res) => {
         try{
-            const { name, email, gender, phone, age, cpf, type, password } = req.body
+            const { name, email, gender, phone, age, cpf } = req.body
             
             //const admin = false
             
@@ -46,9 +46,7 @@ module.exports = app => {
                     gender: gender,
                     phone: phone,
                     age: age,
-                    cpf: cpf,
-                    type: type,
-                    password: password
+                    cpf: cpf
                 }}, { new: true, useFindAndModify: false })
                     .catch(err => res.status(500).send(err))
     
@@ -66,6 +64,12 @@ module.exports = app => {
 
     const get = (req, res) => {
         User.find({ deleteAt: null })
+            .then(users => res.json(users))
+            .catch(err => res.status(500).send(err))
+    }
+    
+    const getPacients = (req, res) => {
+        User.find({ deleteAt: null, type: "pacient" })
             .then(users => res.json(users))
             .catch(err => res.status(500).send(err))
     }
@@ -103,5 +107,5 @@ module.exports = app => {
         }
     }
 
-    return { insert, update, get, getById, remove }
+    return { insert, update, get, getPacients, getById, remove }
 }
