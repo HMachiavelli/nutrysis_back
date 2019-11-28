@@ -16,6 +16,8 @@ module.exports = app => {
         gender: String,
         phone: String,
         age: Number,
+        weight: Number,
+        height: Number,
         cpf: String,
         type: {
             type: String, 
@@ -50,7 +52,7 @@ module.exports = app => {
 
     userSchema.pre('save', async function(next) {
         this.password = encryptPassword(this.password)
-
+ 
         next();
     })
 

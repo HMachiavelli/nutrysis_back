@@ -75,11 +75,11 @@ module.exports = app => {
                     .catch(err => res.status(400). send(err))
 
                 await app.modules.mailer.sendMail({
-                    from: 'luanlazzari@hotmail.com',
+                    from: 'hsmachiavelli@gmail.com',
                     to: email,
                     subject: 'Recuperar sua senha',
                     template: 'forgot_password',
-                    context: { token }
+                    context: { token, email }
                 }, (err) => {
                     if (err) return res.status(400).send(err)
 
