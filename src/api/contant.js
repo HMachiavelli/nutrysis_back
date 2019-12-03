@@ -48,7 +48,7 @@ module.exports = app => {
                 .then(contact => res.json(contact))
                 .catch(err => res.status(500).send(err))
         } else {
-            return res.status(500).send("Please provide correct Id")
+            return res.status(400).send("Please provide correct Id")
         }
     }
 

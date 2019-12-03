@@ -1,11 +1,11 @@
 const app = require('express')()
 const consign = require('consign')
 const db = require('./src/config/db')
-var cors = require('cors');
+const http = require('http').Server(app)
+const io = require('socket.io')(http)
 
 app.db = db
-
-app.use(cors());
+app.io = io
 
 consign()
     .then('./src/models')

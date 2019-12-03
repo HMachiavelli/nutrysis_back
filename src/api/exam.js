@@ -51,25 +51,22 @@ module.exports = app => {
                 .catch(err => res.status(500).send(err))
 
         } else {
-            return res.status(500).send("Please provide correct Id")
+            return res.status(400).send("Please provide correct Id")
         }
     }
 
     const remove = async (req, res) => {
         try {
-            const exam = await Exam.findById(req.params.id)     
-                .catch(err => res.status(500).send(err))
+            if (app.db.Types.ObjectId.isValid(req.params.id)) {
+                const rowUpdated = await Exam.findOneAndDelete({ _id: req.params.id })
+                    .catch(err => res.status(500). send(err))
 
-            const patients = await User.findById(exam.patientId)
-                .catch(err => res.status(500).send(err))
-            notExistsOrError(patients, 'Exame vinculado a um paciente')
+                existsOrError(rowUpdated, "Exame não foi encontrado")
 
-            const rowUpdated = await Exam.findOneAndDelete({ _id: req.params.id })
-                .catch(err => res.status(500). send(err))
-
-            existsOrError(rowUpdated, "Exame não foi encontrado")
-
-            res.status(204).send()
+                res.status(204).send()
+            } else {
+                return res.status(500).send("Please provide correct Id")
+            }
         } catch(msg) {
             res.status(400).send(msg)
         }
